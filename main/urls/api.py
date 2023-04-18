@@ -13,6 +13,7 @@ urlpatterns = [
         include(
             [
                 path("", include(router.urls)),
+                path('sales_by_article', sales.views.SaleViewSet.as_view({'get': 'sales_by_article'}), name='sales_by_article'),
             ]
         ),
     )

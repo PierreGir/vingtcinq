@@ -27,3 +27,21 @@ class SaleSerializer(serializers.ModelSerializer):
 
     def get_total_selling_price(self, obj):
         return int(obj.quantity) * float(obj.unit_selling_price)
+    
+class SalesByArticleSerializer(serializers.Serializer):
+    code = serializers.CharField()
+    name = serializers.CharField()
+    category_name = serializers.CharField()
+    total_selling_price = serializers.FloatField()
+    margin_percentage = serializers.SerializerMethodField()
+    last_sale_date = serializers.DateField()
+
+    class Meta:
+        fields = ["code", "name", "category_name", "total_selling_price", "margin_percentage", "last_sale_date"]
+        
+    def get_margin_percentage(self, obj):
+        try:
+            result = (float(obj["total_selling_price"]) - float(obj["total_manifacturing_cost"])) / float(obj["total_manifacturing_cost"])
+        except:
+            result = 0
+        return result
